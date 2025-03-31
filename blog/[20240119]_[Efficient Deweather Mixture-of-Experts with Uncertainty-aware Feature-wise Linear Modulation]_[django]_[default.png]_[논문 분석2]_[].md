@@ -42,7 +42,7 @@ t-ZNE는 high-dimential feature를 2D로 시각화해주는 도구다. 이를 �
 
 #### Feature Modulated Expert(FME)
 
-본 논문에서는 ViT(vision transformer) 아키텍처를 기반으로 한 MoE 설정을 설명한다. ViT 아키텍처에서 dense FFN은 MoE 계층으로 대체된다. 
+본 논문에서는 ViT(vision transformer) 아키텍처를 기반으로 한 MoE 설정을 설명한다. ViT 아키텍처에서 dense FFN은 MoE 계층으로 대체된다. FME는 모델 내부의 intermediate feature을 입력에 따라 선형적으로 modulate하는 기법이다.
 
 ![](img/컴퓨터비전/TOP_K.jpg)
 
@@ -58,7 +58,7 @@ MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰�
 
 위 식은 입력 x와 학습 파라미터 γ, β의 연산을 통해 MoFME의 연산과정을 나타낸 식이다. 
 
-① : i번째 expert가 학습한 modulation parameter. affine transformation에서 사용된다.
+① : i번째 expert가 학습한 modulation parameter. affine transformation에서 사용된다. γ는 감쇠계수로 입력의 scale을 의미한다. β는 이동계수로 입력의 shift를 의미한다. 여기서 유의할 점은 γ, β 모두 작은 신경망이다. γ, β가 직접 학습되는게 아닌 γ, β를 계산하는 네트워크 파라미터가 학습된다.    
 
 ② : router가 판단한 i번째 expert의 중요도. softmasx와 Top-K를 통해 계산된 값이다.
 
@@ -68,7 +68,13 @@ MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰�
 
 #### Uncertainty-aware Router(UaR)
 
-본 논문은 FME의 성능을 향상시키기 위해 UaR을 제시했다. 이 라우터는 MC Dropout 기법을 기반으로, 라우터 가중치에 대한 암묵적인 불확실한 추정을 수행한다. Ovadia et al. (2019), Ashukha et al. (2020)의 연구에 따라 앙상블 기반 불확실성 추정 방법이 가장 우수한 calibration 및 예측 정확도를 가지지만 높은 계산 복잡도와 저장 비용이 요구된다. 그래서 MC Dropout기법을 선택하였다.
+본 논문은 FME의 성능을 향상시키기 위해 UaR을 제시했다. UaR은 쉽게 말해 라우터의 결과에 대해서 불확실성을 따지는 것이다. softmax 또는 엔트로피 등 사용시 불확실한 확률값을 가진다면 별도의 조치를 시행한다. 취할수 있는 조치는 여러가지가 있다.
+1. Fall lack expert를 따로 두어 불확실할 시 고정된 expert를 사용한다.
+2. 확률 상위 3개의 expert만 실행후 평균 또는 가중합을 사용한다.(Top-K)
+3. 확률을 기반으로 soft routing을 사용한다.
+4. 입력을 거부한다.
+
+MoFME의 라우터는 MC Dropout 기법을 기반으로, 라우터 가중치에 대한 암묵적인 불확실한 추정을 수행한다. Ovadia et al. (2019), Ashukha et al. (2020)의 연구에 따라 앙상블 기반 불확실성 추정 방법이 가장 우수한 calibration 및 예측 정확도를 가지지만 높은 계산 복잡도와 저장 비용이 요구된다. 그래서 MC Dropout기법을 선택하였다.
 
 ![ㅇㅇㅇ](img/컴퓨터비전/UaR_rx.jpg)
 
