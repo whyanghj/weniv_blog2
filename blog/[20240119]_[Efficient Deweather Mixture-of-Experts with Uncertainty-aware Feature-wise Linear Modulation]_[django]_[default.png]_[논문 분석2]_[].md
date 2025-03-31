@@ -1,4 +1,4 @@
-## introduction
+## Introduction
 
 MoE(Mixture of Exprts)는 multi-task learning에서 높은 확장성을 보인다. 하지만 비효율적이고 많은 계산량이라는 단점을 갖고있다. 그렇기에 본 논문에서는 MoFME를 설명하고있다. MoFME는 expert의 개수를 줄이고 다양한 필터를 이용한다. 라우터는 UaR(uncertainty-aware Router)를 사용한다.
 
@@ -46,7 +46,7 @@ t-ZNE는 high-dimential feature를 2D로 시각화해주는 도구다. 이를 �
 
 ![](img/컴퓨터비전/TOP_K.jpg)
 
-MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰이며 x∈R^D로 표현된다. 각 토큰 x는 입력에 따라 동적으로 작동하는 라우터에 의해 E개의 전문가 집합 중 일부에 해당되며, 이때의 라우터 가중치는 r(x)로 표현된다. r(x)는 아래와 같이 표현된다. Wr은 학습 가능한 매개변수로, 입력 토큰을+ E개의 전문가 선택을 위한 router logits으로 매핑하는 역할을 한다.
+MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰이며 x∈R^D로 표현된다. 각 토큰 x는 입력에 따라 동적으로 작동하는 라우터에 의해 E개의 전문가 집합 중 일부에 해당되며, 이때의 라우터 가중치는 r(x)로 표현된다. r(x)는 아래와 같이 표현된다. Wr은 학습 가능한 매개변수로, 입력 토큰을 E개의 전문가 선택을 위한 router logits으로 매핑하는 역할을 한다.
 계산 비용을 줄이기 위해, 모델 내 expert들은 sparse하게 활성화되며, Top-K는 softmax의 확률값이 가장 큰 K개의 값만 남기고 나머지는 0으로 설정한다.
 
 ![](img/컴퓨터비전/MOE_.jpg)
@@ -66,5 +66,14 @@ MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰�
 
 ④ : 각 expert의 중요도와 FM을 활용해 전처리한 입력을 곱해서 모두 더한 가중치 합.
 
- 
+#### Uncertainty-aware Router(UaR)
 
+본 논문은 FME의 성능을 향상시키기 위해 UaR을 제시했다. 이 라우터는 MC Dropout 기법을 기반으로, 라우터 가중치에 대한 암묵적인 불확실한 추정을 수행한다. Ovadia et al. (2019), Ashukha et al. (2020)의 연구에 따라 앙상블 기반 불확실성 추정 방법이 가장 우수한 calibration 및 예측 정확도를 가지지만 높은 계산 복잡도와 저장 비용이 요구된다. 그래서 MC Dropout기법을 선택하였다.
+
+![](img/컴퓨터비전/UaR_rx.jpg)
+
+ri(x)는 위의 설명과 같이 특정 라우터의 출력이며 가우시안 분포로 간주하여 불확실성을 보정할 수 있다. 분포의 평균과 공분산을 "router ensemble"을 통해 추정할 수 있다. 즉, 입력 x를 MC Dropout을 적용한 동일한 라우터에 총 M번 통과시켜 위의 식과 같은 출력 집합을 얻는다.
+
+![](img/컴퓨터비전/UaR.jpg)
+
+위 수식은 라우터 출력 r(x)를 MC Dropout을 반복하여 알아낸 불확실성에 따라 정규화하는 과정이다. r(x)-μ로 현재 라우터 출력이 평균에서 얼마나 벗어나 있는지를 확인한다. 이 값들의 공분산을 구해서 작으면 중요도를 높아진다. 그 후 분모는 L2 norm을 사용하여 벡터의 크기를 1로 만들어 벡터의 방향 정보만 사용하였다.
