@@ -46,7 +46,7 @@ t-ZNE는 high-dimential feature를 2D로 시각화해주는 도구다. 이를 �
 
 ![](img/컴퓨터비전/TOP_K.jpg)
 
-MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰이며 x∈R^D로 표현된다. 각 토큰 x는 입력에 따라 동적으로 작동하는 라우터에 의해 E개의 전문가 집합 중 일부에 해당되며, 이때의 라우터 가중치는 r(x)로 표현된다. r(x)는 아래와 같이 표현된다. Wr은 학습 가능한 매개변수로, 입력 토큰을 E개의 전문가 선택을 위한 router logits으로 매핑하는 역할을 한다.
+MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰이며 x∈R^D로 표현된다. 각 토큰 x는 입력에 따라 동적으로 작동하는 라우터에 의해 E개의 전문가 집합 중 일부에 해당되며, 이때의 라우터 가중치는 r(x)로 표현된다. r(x)는 아래와 같이 표현된다. Wr은 학습 가능한 매개변수로, 입력 토큰을+ E개의 전문가 선택을 위한 router logits으로 매핑하는 역할을 한다.
 계산 비용을 줄이기 위해, 모델 내 expert들은 sparse하게 활성화되며, Top-K는 softmax의 확률값이 가장 큰 K개의 값만 남기고 나머지는 0으로 설정한다.
 
 ![](img/컴퓨터비전/MOE_.jpg)
@@ -54,6 +54,14 @@ MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰�
 명확한 표기를 위해 i번째 전문가의 라우터 가중치를 ri(x)로 나타낸다. 따라서 MoE 계층의 출력은 위와 같이 입력에 대한 expert들의 출력값을 라우터 가중치를 이용해 가중합하여 계산한다.
 여기서 ei(x)는 i번째 expert의 기능을 의미하며, 일반적으로 ViT에서는 FFN으로 설계되는 부분이다.
 
+![](img/컴퓨터비전/FME.png)
 
+위 식은 입력 x와 학습 파라미터 γ, β의 연산을 통해 MoFME의 연산과정을 나타낸 식이다. 
 
+① : i번째 expert가 학습한 modulation parameter. affine transformation에서 사용된다.
+② : router가 판단한 i번째 expert의 중요도. softmasx와 Top-K를 통해 계산된 값이다.
+③ : 입력 x를 i번째 expert에 맞춰 변형하는 식. γ와 x는 Hadamard Product(요소별 곱)을 한다.
+④ : 각 expert의 중요도와 FM을 활용해 전처리한 입력을 곱해서 모두 더한 가중치 합.
+
+ 
 
