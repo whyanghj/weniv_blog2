@@ -59,8 +59,11 @@ MoE 계층의 입력은 Multi-head Attention 계층에서 나온 N개의 토큰�
 위 식은 입력 x와 학습 파라미터 γ, β의 연산을 통해 MoFME의 연산과정을 나타낸 식이다. 
 
 ① : i번째 expert가 학습한 modulation parameter. affine transformation에서 사용된다.
+
 ② : router가 판단한 i번째 expert의 중요도. softmasx와 Top-K를 통해 계산된 값이다.
+
 ③ : 입력 x를 i번째 expert에 맞춰 변형하는 식. γ와 x는 Hadamard Product(요소별 곱)을 한다.
+
 ④ : 각 expert의 중요도와 FM을 활용해 전처리한 입력을 곱해서 모두 더한 가중치 합.
 
  
