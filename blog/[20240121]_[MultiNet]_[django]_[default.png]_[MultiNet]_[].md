@@ -7,7 +7,7 @@
 ## 2. Related Work
  MultiNet이 다루는 주요 task인 detection, classification, semantic segmentic에 대한 기존 방식들을 확인한다.
 
- >- Classificatio
+ >- Classification
  
  AlexNet 이후, 대부분의 classification 은 딥러닝을 활용해왔다. 특히 ResNet은 매우 깊은 신경망을 훈련할 수 있게 해주는 sort 방식이다. 여러 센서 정보를 결합하는 sensor fusion 방식도 사용된다. 본 논문에서는 classification이 detection, semantic segmentation의 task를 돕는 역할을 한다.
 
@@ -54,3 +54,24 @@ MultiNet은 end-to-end로 학습이 가능하며, 세가지 작업을 모두 포
 첫번째 버전은 fully-connected layer와 sofrmax 활성함수를 사용한다. 이 버전은 입력 이미지 크기를 224x224로 고정해서 사용한다. 따라서 이 구조는 VGG나 ResNet 분류 네트워크와 동일한 형태가 된다. 이 구조는 기준선 성능을 제공하는 모델로 사용된다. 다만, 이 디코더는 분할이나 탐지가 공동 추론이 불가능하다. 두 작업은 더 큰 입력 크기를 필요로 하기 때문이다.
 
 두번째 버전은 앞서 만든 인코더가 생성하는 고해상도 feature를 활용할 수 있도록 설계되었다. 일반적인 image classification은 이미지 중심에 하나의 큰 물체가 있는 경우가 많기 때문에 작은 입력 크기로도 충분하다. 하지만 도로 이미지의 경우에는 작고 다양한 물체들이 여기저기 흩어져 있기 때문에, 고해상도 입력이 매우 중요하다. 그래서 입력 크기를 1248x348로 늘려서, 이미지의 각 위치마다 특징을 추출하도록 했다. 이로인해 39x12의 특징 맵이 생성되며, 각 셀은 32x32 픽셀 영역을 대표한다. 이 특징들을 활용하기 위해 채널 수를 줄이는 1x1 컨볼루션(bottleneck layer)를 적용한다. 이 레이어는 채널 수를 30으로 줄여서 계산 효율을 높여준다.
+
+#### 3.3 Detection Decoder
+본 논문의 Detection Decoder는 YOLO, ReInspect와 같은 기존의 proposal-free 방식을 따르는 구조이다.
+위에서 언급한 detection의 2단계중 첫번째 단계인 region proposal 단계를 생략하고 바로 탐지를 수행하므로 추론속도가 매우 빠르다. 
+
+하지만 기존의 Detection 방식인 proposal-based에는 중요한 장점이 있다. 
+내부에서 feature를 scale adjustment 하여 다양한 크기의 물체에 잘 대응한다는 것이다.
+
+일반적인 CNN은 크기가 다른 물체에 대해 일반화하기 어렵기 때문에, 제안 기반 탐지기들은 크기 불변성을 확보하는데 유리하다.
+
+=> proposal-free방식에 위 장점을 더하기 위해 **ROI Align**를 detection decoder 안에 포함시켰다.
+
+#### 3.4 Segmentation Decoder
+segmentation은 기본적으로 FCN의 아이디어를 따른다.
+구체적인 동작 과정을 살펴보겠다.
+
+1. 인코더가 생성한 feature를 바탕으로, 먼저 1x1 conv를 통해 39x12 크기의 저해상도 분할 결과를 만든다.
+2. 결과를 3단계에 걸쳐 upsampling 하기 위해 **transposed convolution**을 사용한다.
+업샘플링 중에는, 고해상도 특징을 복원하기 위해 skip connection도 활용된다. 
+
+=> low-level에서 가져온 특징을 1x1 conv로 가공한 뒤, upsampling된 결과와 덧셈 방식으로 결합한다.
