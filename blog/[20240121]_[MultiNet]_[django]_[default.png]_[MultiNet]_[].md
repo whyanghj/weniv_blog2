@@ -7,10 +7,12 @@
 ## Related Work
  MultiNet이 다루는 주요 task인 detection, classification, semantic segmentic에 대한 기존 방식들을 확인한다.
 
- >- Classification
+ >- Classificatio
+ n
  AlexNet 이후, 대부분의 classification 은 딥러닝을 활용해왔다. 특히 ResNet은 매우 깊은 신경망을 훈련할 수 있게 해주는 sort 방식이다. 여러 센서 정보를 결합하는 sensor fusion 방식도 사용된다. 본 논문에서는 classification이 detection, semantic segmentation의 task를 돕는 역할을 한다.
 
  >- Detection
+ 
  전통적인 딥러닝 기반 객체 탐지 방식은 보통 두 단계로 이어진다.
  1. region proposals 생성
  2. 각 제안의 CNN으로 분류
@@ -23,12 +25,14 @@
  이를 반영해 ROI pooling 기법을 구현한다.
 
  >- Segmentation
+
  딥러닝의 성공에 따라 CNN 기반 Classifiers를 semantic segmentation에 적용하는 연구들이 활발히 이루어졌다.
  초기 방식들은 CNN을 활용해 슬라이딩 윈도우 방식으로 segmentation을 시도했으며, 이후에는 FCN이 제안되어 end-to-end 방식으로 semantic segmentation을 수행하게 되었다. 
 
  저해상도 특징 맵을 업샘플링할 때는 Transposed Convolution을 사용하며, 이후 다양한 FCN 구조가 등장했다. 의미 분할 성능 향상을 위해 CRF와의 결합도 연구되었고, 이를 RNN처럼 학습 가능한 구조로 바꾸는 연구도 있었다. 
 
  >- Multi-Task Learning
+
  MTL은 여러 작업을 함께 작업하여 더 나은 결과를 얻는 방법이다. CNN 기반의 다양한 MTL 방식이 제안되어 왔고, 특히 얼굴 인식 같은 분야에 효과적으로 적용되었다.
  분할을 통해 탐지나 인스턴스 분할(instance segmentation)을 수행하는 연구도 있었지만, 이들은 대체로 인스턴스 단위 작업을 최종 목표로 하고, 의미 분할은 중간 결과로만 사용한다.
 
