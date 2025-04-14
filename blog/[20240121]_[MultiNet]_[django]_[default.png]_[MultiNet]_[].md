@@ -35,3 +35,9 @@
 최근에는 분류/탐지/분할을 모두 가능한 하나의 시스템을 만들고, 각각의 작업마다 다른 파라미터 셋을 학습하는 방식도 등장했으나, 이 경우에는 공동 추론(joint inference)이 어렵다.
 
 본 논문에서 제안한 시스템은 기존과 달리, 의미 분할에서 학습된 풍부한 특징을 다른 작업에도 직접 활용할 수 있는 최초의 접근 방식이라 할 수 있다.
+
+## MultiNet for Joint Semantic Reasoning
+MultiNet은 feed-forward 구조이다. semantic segmentation, image classification, object detection 세가지 task를 공통 인코더와 각 task에 해당하는 decoder 3개를 이용하여 joint inference(공동 추론)을 할 수 있다. 
+
+![MultiNet Architecture](img/컴퓨터비전/MultiNet.png)
+
