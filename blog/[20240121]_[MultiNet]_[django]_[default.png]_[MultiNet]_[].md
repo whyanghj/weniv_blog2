@@ -1,18 +1,18 @@
-## introduction
+## 1. introduction
 #### <Need>
  - 자율 주행에서는 Visual perception이 중요하다. 2012년 AlexNet 이후, 딥러닝의 정확도는 매우 높아졌다. 하지만 자율주행처럼 실시간으로 움직이는 환경에서는 정확도 뿐만 아니라 '속도'도 매우 중요하다. 그래서 지금까지는 속도 향상을 위해 하드웨어 가속기나 모델 경량화와 같은 테크닉들이 쓰였다.
 #### <Solution> 
  - 위 문제 해결을 위해 본 논문은 MultiNet을 제안한다. classification, detection, segmentation을 하나의 모델 안에서 한번에 수행한다. 각 task들이 인코더는 공유하고 디코더는 다르다. 이로 인해 속도 향상을 기대할 수 있다. 
 
-## Related Work
+## 2. Related Work
  MultiNet이 다루는 주요 task인 detection, classification, semantic segmentic에 대한 기존 방식들을 확인한다.
 
  >- Classificatio
- n
+ 
  AlexNet 이후, 대부분의 classification 은 딥러닝을 활용해왔다. 특히 ResNet은 매우 깊은 신경망을 훈련할 수 있게 해주는 sort 방식이다. 여러 센서 정보를 결합하는 sensor fusion 방식도 사용된다. 본 논문에서는 classification이 detection, semantic segmentation의 task를 돕는 역할을 한다.
 
  >- Detection
- 
+
  전통적인 딥러닝 기반 객체 탐지 방식은 보통 두 단계로 이어진다.
  1. region proposals 생성
  2. 각 제안의 CNN으로 분류
@@ -40,8 +40,12 @@
 
 본 논문에서 제안한 시스템은 기존과 달리, 의미 분할에서 학습된 풍부한 특징을 다른 작업에도 직접 활용할 수 있는 최초의 접근 방식이라 할 수 있다.
 
-## MultiNet for Joint Semantic Reasoning
+## 3. MultiNet for Joint Semantic Reasoning
 MultiNet은 feed-forward 구조이다. semantic segmentation, image classification, object detection 세가지 task를 공통 인코더와 각 task에 해당하는 decoder 3개를 이용하여 joint inference(공동 추론)을 할 수 있다. 
 
-![MultiNet Architecture](img/컴퓨터비전/MultiNet.png)
+![MultiNet Architecture](img/컴퓨터비전/MultiNet.jpg)
 
+MultiNet은 end-to-end로 학습이 가능하며, 세가지 작업을 모두 포함한 공동 추론이 45ms 이하의 시간 내에 수행 가능하다.
+
+#### 3.1 Encoder
+인코더는 ResNet-50과 VGG16을 활용한다. 그리고 ImageNet 분류 데이터로 사전 학습된 가중치를 초기값으로 사용한다. 
