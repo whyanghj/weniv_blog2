@@ -47,4 +47,19 @@ Contrastive learning은 각 이미지에 매칭되지 않는 label과도 학습�
 
 => 사전 학습 없이 from scratch로 학습한 이유는 **사전학습 없이 텍스트와 이미지만으로 충분한 성능을 낼 수 있다.**는 것을 증명하기 위해서이다.
 
- - ㅓ으알맬훔내허ㅜㅁ네험ㄴㅋㅇㄹㅀㅁㄴㄴ
+# 3. Experiments
+
+### 3.1 Zero-Shot Transfer
+Zero-Shot Transfer란 학습에 사용되지 않은 데이터셋에 대해 이미지 분류를 하는 task를 의미한다.
+
+Zero-Shot Transfer를 처음 사용한 연구인 Visual N-Grams와 비교해보자.
+![model](img/컴퓨터비전/n_grams.jpg)
+ - 3가지 데이터셋에 대해 모두 CLIP의 성능이 뛰어남을 확인할 수 있다.
+
+### 3.2 Representation Learning
+![representation](img/컴퓨터비전/repre.jpg)
+ - CLIP을 포함한 모든 모델에 Linear probe를 이용해 성능을 비교한 figure이다. 각각 12개, 27개의 데이터셋에 대한 점수를 평균낸 것이다.
+ 
+ ※ Linear Probe 방식은 모델의 파라미터는 그대로 두고, 모델의 맨 마지막 출력 부분에 Classification을 위한 Linear layer만 추가해 그 부분만 학습시키는 방식이다.
+
+ - **모든 크기에서 CLIP 모델이 다른 모델보다 좋은 성능을 보였음을 알 수 있다.**
