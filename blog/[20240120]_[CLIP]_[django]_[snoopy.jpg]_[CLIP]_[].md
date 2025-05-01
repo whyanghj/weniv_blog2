@@ -45,7 +45,7 @@ Contrastive learning은 각 이미지에 매칭되지 않는 label과도 학습�
  - 모든 모델은 ImageNet을 통한 사전학습 없이 from scratch(모델의 가중치를 0 또는 무작위인 상태)로 학습을 진행했다.
 
 
-=> 사전 학습 없이 from scratch로 학습한 이유는 **사전학습 없이 텍스트와 이미지만으로 충분한 성능을 낼 수 있다.**는 것을 증명하기 위해서이다.
+=> 사전 학습 없이 from scratch로 학습한 이유는 **사전학습 없이 텍스트와 이미지만으로 충분한 성능을 낼 수 있다.** 는 것을 증명하기 위해서이다.
 
 
 
@@ -69,6 +69,6 @@ Zero-Shot Transfer를 처음 사용한 연구인 Visual N-Grams와 비교해보�
  ### 3.3 Robustness to Natural Distribution Shift
  - deep learning 모델들은 간단한 task라도 실수를 하는 낮은 성능을 보여주었으며, 새로운 벤치마크 데이터셋에서는 인간보다도 낮은 정확도를 내기도 했다. 그 이유는 over-fitting이었다. 본 논문에서는 CLIP은 이 문제를 해결하여 학습에 사용된 데이터와 다른 분포의 데이터에 대해서도 좋은 성능을 보였음을 보이고있다.
 ![robust](img/컴퓨터비전/robust.jpg)
- - 위 figure를 보면 동일한 ImageNet score(ImageNet 데이터셋 분류 성능)을 가진 모델들 중 CLIP(빨간별)이 가장 좋은 Transfer Score을 기록했다. 
+ - **위 figure를 보면 동일한 ImageNet score(ImageNet 데이터셋 분류 성능)을 가진 모델들 중 CLIP(빨간별)이 가장 좋은 Transfer Score을 기록했다.**
 
  ※ transfer score는 특정 데이터셋으로 학습한 내용을 다른 문제나 데이터셋에서도 잘 활용할 수 있는지를 나타내는 성능 지표이다.
