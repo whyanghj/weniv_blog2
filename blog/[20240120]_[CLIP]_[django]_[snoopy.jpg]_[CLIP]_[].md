@@ -63,3 +63,10 @@ Zero-Shot Transfer를 처음 사용한 연구인 Visual N-Grams와 비교해보�
  ※ Linear Probe 방식은 모델의 파라미터는 그대로 두고, 모델의 맨 마지막 출력 부분에 Classification을 위한 Linear layer만 추가해 그 부분만 학습시키는 방식이다.
 
  - **모든 크기에서 CLIP 모델이 다른 모델보다 좋은 성능을 보였음을 알 수 있다.**
+
+ ### 3.3 Robustness to Natural Distribution Shift
+ - deep learning 모델들은 간단한 task라도 실수를 하는 낮은 성능을 보여주었으며, 새로운 벤치마크 데이터셋에서는 인간보다도 낮은 정확도를 내기도 했다. 그 이유는 over-fitting이었다. 본 논문에서는 CLIP은 이 문제를 해결하여 학습에 사용된 데이터와 다른 분포의 데이터에 대해서도 좋은 성능을 보였음을 보이고있다.
+![robust](img/컴퓨터비전/robust.jpg)
+ - 위 figure를 보면 동일한 ImageNet score(ImageNet 데이터셋 분류 성능)을 가진 모델들 중 CLIP(빨간별)이 가장 좋은 Transfer Score을 기록했다. 
+
+ ※ transfer score는 특정 데이터셋으로 학습한 내용을 다른 문제나 데이터셋에서도 잘 활용할 수 있는지를 나타내는 성능 지표이다.
