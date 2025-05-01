@@ -6,4 +6,13 @@
 
 # Introduction and Motivating Work
 
-자연어 처리 분야에서 raw text를 이용해 사전 학습을 하는 방식은 계속 발전해왔다.
+NLP 분야에서는 BERT, GPT 등의 모델이 대규모 텍스트 데이터로 사전학습한 후, 각 task에 맞게 fine-tuning하는 방식으로 큰 성과를 이루었다. 
+
+Vision 분야에서는 CNN 기반 모델에 라벨이 정해진 데이터셋을 기반으로 사전학습 후, 각 task에 맞게 fine-tuning하는 방식을 사용하였다. vision 분야에서 이 방식은 출력을 고정된 객체 범주 에 묶여 있고, 
+새로운 task에 대해선 추가 라벨링을 해야하는 단점이 존재한다.
+
+그래서 해당 논문에서는 이미지와 텍스트 쌍을 입력으로 사용하는 방법을 제안한다.
+
+# Approach
+### Natural Language Supervision
+이미지 학습은 지도학습으로 이뤄지는데 CLIP에서는 자연어 텍스트를 label 값으로 사용한다.
