@@ -30,19 +30,27 @@ CLIP, ALBEF 등의 multimodal model들은 대부분 웹에서 수집한 대규�
 
 BLIP는 2가지 새로운 아이디어를 포함한다. 
 
-1. Multimodal mixture of Encoder-Decoder(MED)
+1. **Multimodal mixture of Encoder-Decoder(MED)**
 
 효과적인 멀티태스킹과 유연한 transfer를 위한 새로운 아키텍처이다. MED는 세가지 방식으로 작동한다.
 
  - Unimodal encoder
     - image-text의 contrastive learning(대조 학습)을 통해 비전 및 언어 표현을 정렬하도록 학습된다.
+
  - Image-grounded text encoder
     - 추가적인 cross-attention 층을 사용하여 비전-언어 상호작용을 모델링하고, image-text matching 손실로 학습된다. 즉, 주어진 이미지-텍스트 쌍이 맞는 쌍인지 아닌지 판단하는 인코더이다.(binary classification)
+
  - Image-grounded text decoder
     - 양방향 self-attention 층을 casual-attention층으로 교체하고, cross-attention과 feed-forward network는 인코더와 공유한다. 디코더는 이미지가 주어졌을때 그에 매칭되는 텍스트를 생성한다.
 
-2. Captioning and Filtering
+2. **Captioning and Filtering**
  - Captioner
     - 이미지가 주어졌을때 합성 캡션을 생성한다.
  - Filter
     - 원본 텍스트와 합성된 텍스트 모두에서 노이즈가 있는 캡션을 제거한다.
+
+# Method
+
+### Model Architecture
+![BLIP](img/컴퓨터비전/BLIP.jpg)
+이미지 인코더 - ViT
