@@ -53,4 +53,17 @@ BLIP는 2가지 새로운 아이디어를 포함한다.
 
 ### Model Architecture
 ![BLIP](img/컴퓨터비전/BLIP.jpg)
-이미지 인코더 - ViT
+위 이미지를 통해 BLIP의 구조를 살펴보자.
+
+##### image encoder
+
+이미지 인코더로는 **ViT(Vision Transformer)**를 사용한다. ViT의 기본 구조는 그대로 사용하되 마지막 구간에서 [CLS]라는 토큰을 추가한다. ViT는 전체 이미지를 패치화하고 각 패치들을 벡터로 변환하여 하나의 토큰으로 만든다. 이렇게 생성된 여러개의 토큰에 [CLS]라는 토큰을 추가한다. [CLS]는 이미지 전체를 요약하는 임베딩 역할을 하도록 학습된다. 최종 출력에서는 [CLS]의 값만 뽑아서 이미지 전체 표현으로 쓴다.
+
+##### ITC(Image-Text Contrastive Loss)
+> unimodal encoder를 사용한다. image encoder처럼 [CLS] 토큰을 사용하여 문장 전체를 요약하는 임베딩을 만든다. 그리고 이미지와 텍스트 임베딩이 서로 매칭된다면 가깝게, 아니라면 멀어지게 학습한다. 이를 통해 새로운 텍스트나 이미지가 들어왔을 때, 가장 유사한 대응쌍을 잘 찾을 수 있다.
+
+##### ITM(Image-Text Matching Loss)
+> Image-grounded text encoder를 사용한다. 이미지와 텍스트의 매칭여부를 이진분류하는 인코더이다. Cross Attention 층을 추가하여 텍스트 인코더가 이미지 정보를 참고하며 텍스트를 이해할 수 있게 돕는다. 
+
+##### LM(Language Modeling Loss)
+> Image-grounded text decoder를 사용한다. decoder는 이미지에 대한 텍스트를 생성해야하므로 미래의 단어는 보면 안된다. 그래서 ITM에서 self-attention을 casual로 변경한다.
